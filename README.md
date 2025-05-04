@@ -32,7 +32,7 @@ GKD **默认不提供规则**，需自行添加本地规则，或者通过订阅
 <details>
 <summary>示例图片 - 添加至 Topics (点击展开)</summary>
 
-![image](https://e.gkd.li/user-attachments/assets/e8795de1-cac5-48a7-8031-8f09745eeb43)
+![image](https://e.gkd.li/e8795de1-cac5-48a7-8031-8f09745eeb43)
 
 </details>
 

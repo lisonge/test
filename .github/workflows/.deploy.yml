@@ -1,13 +1,15 @@
-name: build
+name: release
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - v*
 
 permissions:
-  contents: read
-  
+  contents: write
+
 jobs:
-  deploy:
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,9 +18,29 @@ jobs:
         with:
           go-version: 'stable'
 
-      - run: CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -o .cache/mergePDFs.exe ./.cache/mergePDFs.go
+      - run: |
+          mkdir -p dist
+          platforms=(
+              "windows-amd64"
+              "linux-amd64"
+              "darwin-amd64"
+              "darwin-arm64"
+          )
+          for platform in "${platforms[@]}"; do
+              GOOS=${platform%-*}
+              GOARCH=${platform#*-}
+              output_name="mergePDFs-${GOOS}-${GOARCH}"
+              if [ "$GOOS" = "windows" ]; then
+                  output_name+=".exe"
+              fi
+              CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build mergePDFs.go -o "dist/$output_name"
+          done
 
-      - uses: actions/upload-artifact@v4
+      - uses: softprops/action-gh-release@v2
         with:
-          name: mergePDFs
-          path: .cache/mergePDFs.exe
+          body: Release ${{ github.ref }}
+          files: |
+            dist/mergePDFs-windows-amd64.exe
+            dist/mergePDFs-linux-amd64
+            dist/mergePDFs-darwin-amd64
+            dist/mergePDFs-darwin-arm64

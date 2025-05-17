@@ -1,0 +1,23 @@
+name: build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['main']
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+
+      - run: CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -o .cache/mergePDFs.exe ./.cache/mergePDFs.go
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mergePDFs
+          path: .cache/mergePDFs.exe

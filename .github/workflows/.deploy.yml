@@ -33,7 +33,7 @@ jobs:
               if [ "$GOOS" = "windows" ]; then
                   output_name+=".exe"
               fi
-              CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build mergePDFs.go -o "dist/$output_name"
+              CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o "dist/$output_name" mergePDFs.go
           done
 
       - uses: softprops/action-gh-release@v2

@@ -15,10 +15,10 @@ body:
       label: |
         Information
       description: |
-        - Shizuku version:\
-        - Mode: [adb, root]\
-        - Android version:\
-        - Device: (optional)\
+        - Shizuku version:
+        - Mode: [adb, root]
+        - Android version:
+        - Device: (optional)
     validations:
       required: true
   - type: textarea

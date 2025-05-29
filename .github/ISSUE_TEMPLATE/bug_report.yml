@@ -29,7 +29,7 @@ body:
       description: |
         Related **full logcat**.
     validations:
-      required: true
+      required: false
   - type: textarea
     id: id_2
     attributes:

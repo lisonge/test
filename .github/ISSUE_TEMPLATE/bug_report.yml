@@ -1,17 +1,50 @@
 name: Bug report
-description: 提交一个 Bug
+title: "[BUG] "
+description: Report a bug of Shizuku
+labels: ["pending triage"]
+
 body:
   - type: markdown
     attributes:
       value: |
-        请按照此模版填写 Bug 界面的快照
+        Please report bugs of Shizuku itself.\
+        **Reports not meet the requirements will be immediately closed**.
   - type: textarea
-    id: feature-description
+    id: id_0
     attributes:
-      label: 请输入 误触/不执行规则 的界面的快照, 也可在后面补充其它信息
+      label: |
+        Information
       description: |
-        按照此教程 [CONTRIBUTING.md](https://github.com/gkd-kit/subscription/blob/main/CONTRIBUTING.md) 或者下面的截图示例 来给界面打快照, 并粘贴到下面的输入框\
-        ![img](https://user-images.githubusercontent.com/45487685/270372181-9e05a475-6664-4e1b-adc7-1e3973fff01f.png)\
-        此外需提供 [主页-点击记录] 的截图
+        - Shizuku version:
+        - Mode: [adb, root]
+        - Android version:
+        - Device: (optional)
     validations:
       required: true
+  - type: textarea
+    id: id_1
+    attributes:
+      label: |
+        Logs
+      description: |
+        Related **full logcat**.
+    validations:
+      required: true
+  - type: textarea
+    id: id_2
+    attributes:
+      label: |
+        Describe the bug
+      description: |
+        A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: id_3
+    attributes:
+      label: |
+        Additional context:
+      description: |
+        Add any other context about the problem here.
+    validations:
+      required: false

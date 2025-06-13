@@ -338,7 +338,8 @@
                             data: option.series[0].data.map(node => ({
                                 ...node,
                                 itemStyle: {
-                                    color: characters.includes(node.name) ? '#ff4d4f' : '#ccc'
+                                    ...node.itemStyle,  // 保持原有的颜色设置
+                                    opacity: characters.includes(node.name) ? 1 : 0.3
                                 }
                             })),
                             links: option.series[0].links.map(link => {
@@ -556,6 +557,46 @@
                             }
                         });
 
+                        // 预设8种显眼的颜色
+                        const presetColors = [
+                            '#D41E2B',  // 红色
+                            '#D41E2B',  // 红色
+                            '#D41E2B',  // 红色
+                            '#D41E2B',  // 红色
+                            '#D41E2B',  // 红色
+                            '#D41E2B',  // 红色
+                            '#D41E2B',  // 红色
+                            '#D41E2B',  // 红色
+                        ];
+                        const defaultColor = '#FF6B77';  // 其他人物的默认颜色
+
+                        // 根据热度排序并获取前8名人物
+                        const top6Characters = entityData.value
+                            .filter(entity => entity.type === "人物")
+                            .sort((a, b) => b.heat - a.heat)
+                            .slice(0, 6)
+                            .map(entity => entity.name);
+
+                        // 在initNetwork函数中，修改节点大小的计算逻辑
+                        const getNodeSize = (heat) => {
+                            // 月初特殊处理
+                            if (heat > 0.2) return 50;  // 月初 (heat ≈ 0.204)
+                            
+                            // 红红特殊处理
+                            if (heat > 0.15) return 48;  // 红红 (heat ≈ 0.182)
+                            
+                            // 热度小于0.01的统一大小
+                            if (heat < 0.01) return 6;
+                            
+                            // 其余的从30开始递加1
+                            // 计算在0.01-0.15范围内的相对位置
+                            // 将这个范围映射到30-47的大小区间
+                            const position = (heat - 0.01) / (0.15 - 0.01);  // 归一化到0-1
+                            const size = Math.floor(10 + position * 34);  // 30到47的区间，共18个大小级别
+                            
+                            return size;
+                        };
+
                         const option = {
                             title: {
                                 text: showAllWater.value ? '狐妖小红娘剧情网络图 - 注水' : '狐妖小红娘剧情网络图 - 全部',
@@ -678,11 +719,13 @@
                                     return {
                                         name: node,
                                         value: heat,
-                                        symbolSize: level.size,
+                                        symbolSize: getNodeSize(heat),  // 使用热度值动态计算节点大小
                                         x: x,
                                         y: y,
                                         itemStyle: {
-                                            color: '#ff4d4f'
+                                            color: top6Characters.includes(node) 
+                                                ? presetColors[top6Characters.indexOf(node)]
+                                                : defaultColor
                                         },
                                         label: {
                                             show: true,
